@@ -89,8 +89,20 @@ drone secret add \
 ```
 
 
-### Next
+### bitbucket serverとの連携
 
-- 環境変数の動作
-- registryへのアクセス制御方法の検討
-- droneioのアカウント及びsecretsの管理とビルドしたApplicationに埋め込むアカウント情報の分離パターンの考察
+- bitbucketの場合は認証ユーザー固定のためCI結果を見れる=操作できるとなって危険が危ない
+- post web hookのPluginが必須
+
+oauth1はRSAキーが必要でapp側が秘密鍵を持つ。
+```
+openssl genrsa -out key.pem 2048
+openssl rsa -in key.pem -pubout > key.pub
+```
+Incomingにはdroneioで決め打ちをしたCosumerKeyとpublic keyを入れる
+
+applicationは`https://<my.drone.server>`
+callbackは`https://<my.drone.server>/authorize`
+
+Outcomingはテキトーに設定
+Token/Authはすべて`/authorize`に対して行わせる

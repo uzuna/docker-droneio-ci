@@ -1,2 +1,5 @@
 regdata
 .env
+key.pub
+key.pem
+dronebb
